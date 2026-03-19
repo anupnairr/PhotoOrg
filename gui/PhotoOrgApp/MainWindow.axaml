@@ -1,0 +1,108 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="PhotoOrgApp.MainWindow"
+        Title="PhotoOrg - Photo Organiser"
+        Width="780" Height="780"
+        MinWidth="700" MinHeight="700"
+        CanResize="True"
+        WindowStartupLocation="CenterScreen"
+        Background="#F0F4F8">
+
+  <Grid RowDefinitions="Auto,*,Auto,Auto">
+
+    <!-- HEADER -->
+    <Border Grid.Row="0" Background="#1E3A5F" Padding="24,14">
+      <StackPanel>
+        <TextBlock Text="PhotoOrg" FontSize="24" FontWeight="Bold" Foreground="White"/>
+        <TextBlock Text="Automatic Photo and Video Organiser" FontSize="11" Foreground="#A8C4E0" Margin="0,2,0,0"/>
+      </StackPanel>
+    </Border>
+
+    <!-- SCROLLABLE CONTENT -->
+    <ScrollViewer Grid.Row="1" Padding="20,16" VerticalScrollBarVisibility="Auto">
+      <StackPanel Spacing="12">
+
+        <!-- SOURCE FOLDER -->
+        <Border Background="White" CornerRadius="8" Padding="16" BoxShadow="0 1 4 0 #20000000">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Source Folder" FontWeight="SemiBold" FontSize="13" Foreground="#1E3A5F"/>
+            <TextBlock Text="Folder containing your unorganised photos and videos" FontSize="11" Foreground="#888888"/>
+            <Grid ColumnDefinitions="*,110">
+              <TextBox x:Name="SourcePathBox" Grid.Column="0" IsReadOnly="True" Watermark="No folder selected..." Margin="0,0,8,0"/>
+              <Button Grid.Column="1" Content="Browse" Click="BrowseSource_Click" Background="#1E3A5F" Foreground="White" CornerRadius="6" Padding="10,8" HorizontalContentAlignment="Center"/>
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <!-- OUTPUT FOLDER -->
+        <Border Background="White" CornerRadius="8" Padding="16" BoxShadow="0 1 4 0 #20000000">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Output Folder" FontWeight="SemiBold" FontSize="13" Foreground="#1E3A5F"/>
+            <TextBlock Text="Where sorted Year and Month folders will be created" FontSize="11" Foreground="#888888"/>
+            <Grid ColumnDefinitions="*,110">
+              <TextBox x:Name="OutputPathBox" Grid.Column="0" IsReadOnly="True" Watermark="No folder selected..." Margin="0,0,8,0"/>
+              <Button Grid.Column="1" Content="Browse" Click="BrowseOutput_Click" Background="#1E3A5F" Foreground="White" CornerRadius="6" Padding="10,8" HorizontalContentAlignment="Center"/>
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <!-- OPTIONS -->
+        <Border Background="White" CornerRadius="8" Padding="16" BoxShadow="0 1 4 0 #20000000">
+          <StackPanel Spacing="10">
+            <TextBlock Text="Options" FontWeight="SemiBold" FontSize="13" Foreground="#1E3A5F"/>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <CheckBox x:Name="FindDupesCheck" IsChecked="True"/>
+              <TextBlock Text="Detect and move duplicate files" VerticalAlignment="Center" FontSize="12" Foreground="#333333"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <CheckBox x:Name="IncludeHiddenCheck" IsChecked="True"/>
+              <TextBlock Text="Include hidden files and folders" VerticalAlignment="Center" FontSize="12" Foreground="#333333"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <CheckBox x:Name="OpenWhenDoneCheck" IsChecked="True"/>
+              <TextBlock Text="Open output folder when finished" VerticalAlignment="Center" FontSize="12" Foreground="#333333"/>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- PROGRESS -->
+        <Border Background="White" CornerRadius="8" Padding="16" BoxShadow="0 1 4 0 #20000000">
+          <StackPanel Spacing="8">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Text="Progress" FontWeight="SemiBold" FontSize="13" Foreground="#1E3A5F"/>
+              <TextBlock x:Name="ProgressLabel" Grid.Column="1" Text="0%" FontSize="12" Foreground="#888888"/>
+            </Grid>
+            <ProgressBar x:Name="MainProgressBar" Minimum="0" Maximum="100" Value="0" Height="10" CornerRadius="5" Foreground="#1E3A5F" Background="#E0E8F0"/>
+          </StackPanel>
+        </Border>
+
+        <!-- LOG -->
+        <Border Background="White" CornerRadius="8" Padding="16" BoxShadow="0 1 4 0 #20000000">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Activity Log" FontWeight="SemiBold" FontSize="13" Foreground="#1E3A5F"/>
+            <Border Background="#1A1A2E" CornerRadius="6" Padding="10">
+              <TextBox x:Name="LogBox" IsReadOnly="True" AcceptsReturn="True" FontFamily="Courier New" FontSize="11" Foreground="#00FF88" Background="Transparent" BorderThickness="0" Height="120" TextWrapping="Wrap"/>
+            </Border>
+          </StackPanel>
+        </Border>
+
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- BUTTONS - always visible, never scroll away -->
+    <Border Grid.Row="2" Background="#F0F4F8" Padding="20,10">
+      <Grid ColumnDefinitions="*,*,*">
+        <Button Grid.Column="0" Content="Start Organising" Click="Start_Click" Background="#1A5C38" Foreground="White" FontWeight="SemiBold" FontSize="13" CornerRadius="8" Padding="0,14" Margin="0,0,6,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+        <Button Grid.Column="1" Content="Clear Log" Click="ClearLog_Click" Background="#555555" Foreground="White" FontSize="13" CornerRadius="8" Padding="0,14" Margin="3,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+        <Button Grid.Column="2" Content="Open Output" Click="OpenOutput_Click" Background="#1E3A5F" Foreground="White" FontSize="13" CornerRadius="8" Padding="0,14" Margin="6,0,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+      </Grid>
+    </Border>
+
+    <!-- STATUS BAR -->
+    <Border Grid.Row="3" Background="#1E3A5F" Padding="16,8">
+      <TextBlock x:Name="StatusText" Text="Ready - select folders to begin" FontSize="11" Foreground="#A8C4E0"/>
+    </Border>
+
+  </Grid>
+
+</Window>
