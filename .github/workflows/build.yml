@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-windows:
     runs-on: windows-latest
@@ -12,15 +15,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        env:
-          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
-        env:
-          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
       - name: Restore packages
         run: dotnet restore gui/PhotoOrgApp/PhotoOrgApp.csproj
@@ -33,18 +32,13 @@ jobs:
           --self-contained true
           -p:PublishSingleFile=true
           -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:AssemblyName=PhotoOrg
           -f net10.0
           -o dist/
 
       - name: List dist folder
-        run: ls dist/
-        shell: bash
-
-      - name: Rename output file
-        run: |
-          cd dist
-          for f in *.exe; do mv "$f" PhotoOrg.exe; done
-        shell: bash
+        run: dir dist
+        shell: cmd
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
