@@ -10,6 +10,7 @@
     <Version>1.0.0</Version>
     <Authors>Anoopp Nair</Authors>
     <Description>Automatic photo and video organiser for Windows</Description>
+    <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
