@@ -36,8 +36,14 @@ jobs:
           -f net10.0
           -o dist/
 
+      - name: List dist folder
+        run: ls dist/
+        shell: bash
+
       - name: Rename output file
-        run: mv dist/PhotoOrgApp.exe dist/PhotoOrg.exe
+        run: |
+          cd dist
+          for f in *.exe; do mv "$f" PhotoOrg.exe; done
         shell: bash
 
       - name: Create Release
