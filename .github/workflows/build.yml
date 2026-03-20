@@ -1,0 +1,59 @@
+name: Build and Release PhotoOrg
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore packages
+        run: dotnet restore gui/PhotoOrgApp/PhotoOrgApp.csproj
+
+      - name: Build Windows EXE
+        run: >
+          dotnet publish gui/PhotoOrgApp/PhotoOrgApp.csproj
+          -c Release
+          -r win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -o dist/
+
+      - name: Rename output file
+        run: mv dist/PhotoOrgApp.exe dist/PhotoOrg.exe
+        shell: bash
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: PhotoOrg ${{ github.ref_name }}
+          body: |
+            ## PhotoOrg ${{ github.ref_name }}
+
+            Automatic photo and video organiser for Windows.
+
+            ### What is new
+            - See CHANGELOG.md for full details
+
+            ### How to install
+            1. Download PhotoOrg.exe below
+            2. Double click to run
+            3. No installation needed
+
+            ### Requirements
+            - Windows 10 or Windows 11
+          files: dist/PhotoOrg.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
